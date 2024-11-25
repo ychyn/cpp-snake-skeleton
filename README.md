@@ -2,6 +2,13 @@
 
 Vous allez compléter un jeu classique de Snake en C++, directement jouable dans le terminal. Ce code ne ressemble pas à ce qu'on ferait dans la vraie vie mais il a le bon goût d'être simple à prendre en main. 
 
+## Information pratique 
+
+Pour commencer ce projet, vous devez **impérativement** forker le dépôt Git d'origine. Cela vous permettra de travailler sur votre propre copie, car vous n'avez pas les droits sur le dépôt d'origine. Il vous suffit : 
+
+1. Rendez-vous sur le dépôt du projet sur Github (si vous lisez ceci c'est que vous y êtes !!).
+2. Cliquez sur le bouton Fork en haut à droite pour créer une copie du projet sur votre propre compte GitHub.
+
 ## Structure du Projet
 
 Le code est découpé en plusieurs parties que vous devrez compléter. Voici un aperçu des éléments principaux pour mieux comprendre comment le jeu fonctionne.
@@ -12,10 +19,11 @@ Le terrain de jeu est représenté par une grille 2D de dimensions `nx x ny` (pa
 
 Le background est stocké dans un tableau 1D (`std::vector<int>`), où chaque cellule de la grille correspond à une position donnée.
 Signification des valeurs dans le tableau :
-0 : Case vide.
-1 : Bordure du terrain.
-2 : Nourriture (que le serpent doit manger).
-3 : un case du serpent (symboliser par `o`)
+
+- 0 : Case vide.
+- 1 : Bordure du terrain.
+- 2 : Nourriture (que le serpent doit manger).
+- 3 : un case du serpent (symboliser par `o`)
 
 L'index dans le tableau 1D peut être calculé à partir des coordonnées 2D (x, y) comme suit :
 
