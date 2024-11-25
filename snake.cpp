@@ -11,6 +11,7 @@
 
 namespace internal
 {
+  // 💀💀💀💀💀💀💀💀 DON'T TOUCH THIS BLOCK 💀💀💀💀💀💀💀💀💀 ///
   int keyEvent();
   void frameSleep(const int &ms);
   const char *cmd_clear = "clear";
@@ -18,8 +19,10 @@ namespace internal
   void printFrame(const int &nx, const int &ny, const std::vector<int> &bg);
   void createFood(std::vector<int> &bg, std::array<int, 2> &food, const int &nx, const int &ny);
   bool eatFood(std::array<int, 2> &food, std::vector<std::pair<int, int>> &snake);
+  // 💀💀💀💀💀💀💀💀 DON'T TOUCH THIS BLOCK 💀💀💀💀💀💀💀💀💀 ///
 }
 
+// 😇 Je suis gentil je vous ai fait le tracé du terrain 😇
 std::vector<int> backgroundSetup(const int &nx, const int &ny)
 {
   std::vector<int> bg(nx * ny, 0);
@@ -43,6 +46,10 @@ std::vector<int> backgroundSetup(const int &nx, const int &ny)
 
   return bg;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+/////// 🧑‍💻 FROM HERE you must complete 🧑‍💻 ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 void add_snake(const std::vector<std::pair<int, int>> &snake, std::vector<int> &bg, int nx, int ny)
 {
