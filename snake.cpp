@@ -54,21 +54,38 @@ std::vector<int> backgroundSetup(const int &nx, const int &ny)
 void add_snake(const std::vector<std::pair<int, int>> &snake, std::vector<int> &bg, int nx, int ny)
 {
   // 👉️ Your code here 👈️
+for (int i = 0; i < snake.size(); i++) {
+    bg[snake[i].second * nx + snake[i].first] = 3;
+}
 }
 
 void remove_snake(const std::vector<std::pair<int, int>> &snake, std::vector<int> &bg, int nx, int ny)
 {
   // 👉️ Your code here 👈️
+  for (int i = 0; i < snake.size(); i++) {
+    bg[snake[i].second * nx + snake[i].first] = 0;
+}
 }
 
 std::array<int, 2> snake_movement(char key)
 {
   // 👉️ Your code here 👈️
+  std::array<int, 2> a = {0, 0};
+  if (key == 'z') {std::array<int, 2> a = {0, 1};}
+  else if (key == 'd') {std::array<int, 2> a = {1, 0};}
+  else if (key == 's') {std::array<int, 2> a = {0, -1};}
+  else if (key == 'q') {std::array<int, 2> a = {-1, 0};};
+return a;
 }
 
 bool verifyBorder(const std::vector<std::pair<int, int>> &snake, int nx, int ny)
 {
   // 👉️ Your code here 👈️
+  bool is_border = false;
+  for (int i = 0; i < snake.size(); i++) {
+    if (snake[i].first == 0 or snake[i].second == nx or snake[i].second == 0 or snake[i].second == ny) {is_border = true;}
+};
+return is_border;
 }
 
 std::vector<std::pair<int, int>> setupSnake(int snake_len)
