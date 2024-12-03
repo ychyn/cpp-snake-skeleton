@@ -103,6 +103,12 @@ std::vector<std::pair<int, int>> setupSnake(int snake_len)
 void update_snake_coordinates(std::vector<std::pair<int, int>> &snake, bool eat, std::array<int, 2> dxdy)
 {
   // 👉️ Your code here 👈️
+  for (int i = 0; i < snake.size(); i++) {
+    auto [x_i,y_i] = snake[i];
+    auto [dx,dy] = dxdy;
+    snake[i] = std::pair<int, int> (x_i + dx, y_i + dy);
+    if (eat and i == snake.size()-1) {snake.push_back(std::pair<int, int> (x_i, y_i)); i++;};
+}
 }
 
 void startGame(const int &lap, const int &nx, const int &ny, std::vector<std::pair<int, int>> &snake, std::vector<int> &bg)
