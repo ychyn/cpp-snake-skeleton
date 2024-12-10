@@ -71,21 +71,29 @@ std::array<int, 2> snake_movement(char key)
 {
   // 👉️ Your code here 👈️
   std::array<int, 2> a = {0, 0};
-  if (key == 'z') {std::array<int, 2> a = {0, 1};}
-  else if (key == 'd') {std::array<int, 2> a = {1, 0};}
-  else if (key == 's') {std::array<int, 2> a = {0, -1};}
-  else if (key == 'q') {std::array<int, 2> a = {-1, 0};};
+  if (key == 'z') {a = {0, -1};}
+  else if (key == 'd') {a = {1, 0};}
+  else if (key == 's') {a = {0, 1};}
+  else if (key == 'q') {a = {-1, 0};};
 return a;
 }
 
 bool verifyBorder(const std::vector<std::pair<int, int>> &snake, int nx, int ny)
 {
   // 👉️ Your code here 👈️
-  bool is_border = false;
-  for (int i = 0; i < snake.size(); i++) {
-    if (snake[i].first == 0 or snake[i].second == nx or snake[i].second == 0 or snake[i].second == ny) {is_border = true;}
-};
+  bool is_border = true;
+    if (snake[0].first == 0 or snake[0].first == nx-1 or snake[0].second == 0 or snake[0].second == ny-1) {is_border = false;}
 return is_border;
+}
+
+bool verifySnakeSuperposition(const std::vector<std::pair<int, int>> &snake, int nx, int ny)
+{
+  // 👉️ Your code here 👈️
+  bool not_superposed = true;
+  for (int i = 1; i < snake.size(); i++) {
+    if (snake[i] == snake[0]) {not_superposed = false;}
+};
+return not_superposed;
 }
 
 std::vector<std::pair<int, int>> setupSnake(int snake_len)
@@ -94,7 +102,7 @@ std::vector<std::pair<int, int>> setupSnake(int snake_len)
   int i;
   for (i = 0; i < snake_len; i++)
   {
-    snake[i].first = 10 + i;
+    snake[i].first = 10 + snake_len - i;
     snake[i].second = 10;
   }
   return snake;
@@ -103,23 +111,23 @@ std::vector<std::pair<int, int>> setupSnake(int snake_len)
 void update_snake_coordinates(std::vector<std::pair<int, int>> &snake, bool eat, std::array<int, 2> dxdy)
 {
   // 👉️ Your code here 👈️
-  for (int i = 0; i < snake.size(); i++) {
-    auto [x_i,y_i] = snake[i];
-    auto [dx,dy] = dxdy;
-    snake[i] = std::pair<int, int> (x_i + dx, y_i + dy);
-    if (eat and i == snake.size()-1) {snake.push_back(std::pair<int, int> (x_i, y_i)); i++;};
-}
+  auto [dx,dy] = dxdy;
+  auto [head_x,head_y] = snake[0];
+  snake.insert(snake.begin(), {head_x + dx,head_y + dy});
+  if (!eat) {snake.pop_back();};
 }
 
-void startGame(const int &lap, const int &nx, const int &ny, std::vector<std::pair<int, int>> &snake, std::vector<int> &bg)
+void startGame(const int &lap, const int &nx, const int &ny, std::vector<std::pair<int, int>> &snake, std::vector<int> &bg, int gamemode)
 {
+  float modified_lap = lap;
   char key;
   std::array<int, 2> dxdy = {1, 0};
   std::array<int, 2> food = {0, 0};
   internal::createFood(bg, food, nx, ny);
   while (true)
   {
-    internal::frameSleep(lap);
+    internal::frameSleep(modified_lap);
+    modified_lap = modified_lap*0.999;
     if (internal::keyEvent())
     {
       std::cin >> key;
@@ -130,10 +138,20 @@ void startGame(const int &lap, const int &nx, const int &ny, std::vector<std::pa
     internal::printFrame(nx, ny, bg);
     remove_snake(snake, bg, nx, ny);
     bool out = verifyBorder(snake, nx, ny);
-    if (out == false)
+    bool superposed = verifySnakeSuperposition(snake,nx,ny);
+    if ( superposed == false | (out == false & gamemode == 0)) //mode avec border
     {
       std::cerr << "" << std::endl;
       exit(1);
+    }
+    else if (out == false & gamemode == 1){ //mode sans border
+      auto [dx,dy] = dxdy;
+      auto [head_x,head_y] = snake[0];
+      bg[head_y*nx + head_x] = 1;
+      if (dx == 0 & dy == 1) {snake[0].second = ny - head_y;}
+      else if (dx == 0 & dy == -1) {snake[0].second = ny - head_y -2;}
+      else if (dx == 1 & dy == 0) {snake[0].first = nx - head_x;}
+      else if (dx == -1 & dy == 0) {snake[0].first = nx - head_x -2;}
     }
     bool eat = internal::eatFood(food, snake);
     if (eat)
@@ -150,13 +168,14 @@ int main()
   const int ny = 25;
   const int lap = 200;
   int snake_len = 3;
+  int gamemode = 1;
 
   std::vector<int> background = backgroundSetup(nx, ny);
   internal::printFrame(nx, ny, background);
 
   std::vector<std::pair<int, int>> snake = setupSnake(snake_len);
 
-  startGame(lap, nx, ny, snake, background);
+  startGame(lap, nx, ny, snake, background, gamemode);
   return 0;
 }
 
